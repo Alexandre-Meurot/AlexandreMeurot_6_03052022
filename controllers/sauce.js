@@ -6,6 +6,10 @@ exports.createSauce = (req, res, next) => {
     delete sauceObject._id;
     const sauce = new Sauce({
         ...sauceObject,
+        likes: 0,
+        dislikes: 0,
+        usersLiked: [],
+        usersDisliked: [],
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
     sauce.save()
@@ -27,7 +31,8 @@ exports.modifySauce = (req, res, next) => {
 
 // méthode de suppression de sauce
 exports.deleteSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id }).then((sauce) => {
+    Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => {
         // vérifie si la sauce existe
         if (!sauce) {
             return res.status(404).json({
