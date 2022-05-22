@@ -1,18 +1,18 @@
 PIIQUANTE
 
-Cloner le projet dans un dossier "backend" : 
+Cloner le projet dans un dossier "backend" :
 git clone https://github.com/Alexandre-Meurot/AlexandreMeurot_6_03052022.git backend
 
-Cloner le projet dans un dossier "frontend" : 
+Cloner le projet dans un dossier "frontend" :
 git clone https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6.git frontend
 
-
 Depuis le frontend :
-- npm install
-- npm run start ou ng serve
 
+- npm install
+- npm run start
 
 Depuis le backend :
+
 - npm install -g nodemon
 - npm install express
 - npm install mongoose
