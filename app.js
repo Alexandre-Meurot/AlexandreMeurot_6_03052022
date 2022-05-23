@@ -7,6 +7,9 @@ const sauceRoutes = require("./routes/sauce");
 
 const app = express();
 
+//-----------------------------------------
+// Connection à la base de données Mongoose
+//-----------------------------------------
 mongoose
   .connect(
     "mongodb+srv://alex:CIN9brVByctjJJ1D@cluster0.fkp7l.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",

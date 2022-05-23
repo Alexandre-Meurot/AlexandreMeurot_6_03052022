@@ -2,7 +2,7 @@ const Sauce = require("../models/Sauce");
 const fs = require("fs");
 
 //-----------------------------
-// méthode de création de sauce
+// Méthode de création de sauce
 //-----------------------------
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
@@ -22,7 +22,7 @@ exports.createSauce = (req, res, next) => {
 };
 
 //---------------------------------
-// méthode de modification de sauce
+// Méthode de modification de sauce
 //---------------------------------
 exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file
@@ -44,7 +44,7 @@ exports.modifySauce = (req, res, next) => {
 };
 
 //------------------------------------------------
-// méthode de suppression de sauce et de son image
+// Méthode de suppression de sauce et de son image
 //------------------------------------------------
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
@@ -60,7 +60,7 @@ exports.deleteSauce = (req, res, next) => {
 };
 
 //---------------------------------
-// méthode pour récupérer une sauce
+// Méthode pour récupérer une sauce
 //---------------------------------
 exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
@@ -69,7 +69,7 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 //-----------------------------------------
-// méthode pour récupérer toutes les sauces
+// Méthode pour récupérer toutes les sauces
 //-----------------------------------------
 exports.getAllSauces = (req, res, next) => {
   Sauce.find()

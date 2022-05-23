@@ -3,8 +3,11 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
 
-// méthode de création de compte utilisateur
+//------------------------------------------
+// Méthode de création de compte utilisateur
+//------------------------------------------
 exports.signup = (req, res, next) => {
+  // hashage du mot de passe avec bcrypt
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
@@ -19,14 +22,16 @@ exports.signup = (req, res, next) => {
     })
     .catch((error) => res.status(500).json({ error }));
 };
-
-// méthode de connexion utilisateur
+//---------------------------------
+// Méthode de connexion utilisateur
+//---------------------------------
 exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
         return res.status(401).json({ error: "Utilisateur non trouvé !" });
       }
+      // vérification du mot de passe hashé avec bcrypt
       bcrypt
         .compare(req.body.password, user.password)
         .then((valid) => {
