@@ -21,4 +21,5 @@ Depuis le backend :
 - npm install jsonwebtoken
 - npm install multer
 - npm install password-validator
+- npm install helmet --save
 - nodemon server

@@ -1,25 +1,35 @@
+//--------------------
+// Requires
+//--------------------
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 
+// Security Requires
+const helmet = require("helmet");
+const dotenv = require("dotenv").config();
+
+// Routes
 const userRoutes = require("./routes/user");
 const sauceRoutes = require("./routes/sauce");
 
+// Start de l'application Express
 const app = express();
 
 //-----------------------------------------
 // Connection à la base de données Mongoose
 //-----------------------------------------
 mongoose
-  .connect(
-    "mongodb+srv://alex:CIN9brVByctjJJ1D@cluster0.fkp7l.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect(process.env.MONGODB_PIIQUANTE, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch((error) => console.log("Connexion à MongoDB échouée !", error));
 
-app.use(express.json());
-
+//-------------------------
+// Paramètre d'en-tête CORS
+//-------------------------
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -33,8 +43,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/images", express.static(path.join(__dirname, "images")));
+app.use(express.json());
 
+// Sécurité
+app.use(helmet());
+
+//----------------------
+// Paramètres des routes
+//-----------------------
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/sauces", sauceRoutes);
 app.use("/api/auth", userRoutes);
 
