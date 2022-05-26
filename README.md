@@ -20,4 +20,5 @@ Depuis le backend :
 - npm install bcrypt
 - npm install jsonwebtoken
 - npm install multer
+- npm install password-validator
 - nodemon server
