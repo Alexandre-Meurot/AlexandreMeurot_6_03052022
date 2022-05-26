@@ -8,6 +8,7 @@ const path = require("path");
 // Security Requires
 const helmet = require("helmet");
 const dotenv = require("dotenv").config();
+const mongoSanitize = require("express-mongo-sanitize");
 
 // Routes
 const userRoutes = require("./routes/user");
@@ -34,7 +35,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
+    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization, Content-Type, Access-Control-Allow-Headers"
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -44,9 +45,15 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: false,
+  })
+);
 
 // Sécurité
 app.use(helmet());
+app.use(mongoSanitize());
 
 //----------------------
 // Paramètres des routes
