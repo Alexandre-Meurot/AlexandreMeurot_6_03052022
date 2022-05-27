@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const emailValidator = require("email-validator");
 
 const User = require("../models/User");
 
@@ -7,21 +8,31 @@ const User = require("../models/User");
 // Méthode de création de compte utilisateur
 //------------------------------------------
 exports.signup = (req, res, next) => {
-  // hashage du mot de passe avec bcrypt
-  bcrypt
-    .hash(req.body.password, 10)
-    .then((hash) => {
-      const user = new User({
-        email: req.body.email,
-        password: hash,
-      });
-      user
-        .save()
-        .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
-        .catch((error) => res.status(400).json({ error }));
-    })
-    .catch((error) => res.status(500).json({ error }));
+  // vérification du format de l'email
+  const isValidateEmail = emailValidator.validate(req.body.email);
+  if (!isValidateEmail) {
+    res.writeHead(400, 'Email incorrect !"}', {
+      "content-type": "application/json",
+    });
+    res.end("Le format de l'email est incorrect.");
+  } else {
+    // Si email au bon format alors = hashage du mot de passe avec bcrypt
+    bcrypt
+      .hash(req.body.password, 10)
+      .then((hash) => {
+        const user = new User({
+          email: req.body.email,
+          password: hash,
+        });
+        user
+          .save()
+          .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
+          .catch((error) => res.status(400).json({ error }));
+      })
+      .catch((error) => res.status(500).json({ error }));
+  }
 };
+
 //---------------------------------
 // Méthode de connexion utilisateur
 //---------------------------------
