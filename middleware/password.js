@@ -1,31 +1,16 @@
-const passwordValidator = require("password-validator");
-
-//----------------------------------------
-// Création d'un schéma password-validator
-//----------------------------------------
-const schemaPassword = new passwordValidator();
-
-schemaPassword
-  .is()
-  .min(5) // 8 caractères minimum
-  .is()
-  .max(30) // 30 caractères maximum
-  .has()
-  .uppercase(1) // doit contenir 1 majuscule
-  .has()
-  .lowercase() // peut contenir des minuscules
-  .has()
-  .digits(1) // doit contenir 1 chiffre
-  .has()
-  .not()
-  .spaces(); // ne doit pas contenir d'espace
+const passwordSchema = require("../models/Password");
 
 module.exports = (req, res, next) => {
-  if (schemaPassword.validate(req.body.password)) {
+  if (passwordSchema.validate(req.body.password)) {
     next();
   } else {
-    return res.status(400).json({
-      error: "Le mot de passe n'est pas assez fort !",
-    });
+    res.writeHead(
+      400,
+      "Le mot de passe doit comprendre 8 caractères minimum dont une majuscule, un chiffre, et sans espaces",
+      {
+        "content-type": "application/json",
+      }
+    );
+    res.end("Le format du mot de passe est incorrect");
   }
 };
