@@ -49,5 +49,5 @@ git clone https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6.git 
 
 5. Lancer le backend :
 
-   - **Installer toutes les dépendances : npm install**
+   - Installer toutes les dépendances : **npm install**
    - **nodemon server**
