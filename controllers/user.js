@@ -15,7 +15,7 @@ const emailValidator = require("email-validator");  // Vérification format emai
 
 exports.signup = (req, res, next) => {
 
-    const emailCryptoJs = cryptoJs.HmacSHA256(req.body.email, "CLE_SECRETE").toString() // chiffrage du mail avant envoie à la BDD
+    const emailCryptoJs = cryptoJs.HmacSHA256(req.body.email, process.env.CRYPTOJS_KEY).toString() // chiffrage du mail avant envoie à la BDD
     const isValidateEmail = emailValidator.validate(req.body.email); // vérification du format de l'email
 
     // Si email au bon format alors = hashage du mot de passe avec bcryptc
@@ -47,7 +47,7 @@ exports.signup = (req, res, next) => {
 
 exports.login = (req, res, next) => {
 
-    const cryptedResearchedEmail = cryptoJs.HmacSHA256(req.body.email, 'CLE_SECRETE').toString(); // décryptage du mail
+    const cryptedResearchedEmail = cryptoJs.HmacSHA256(req.body.email, process.env.CRYPTOJS_KEY).toString(); // décryptage du mail
 
   User.findOne({ email: cryptedResearchedEmail })
     .then((user) => {
