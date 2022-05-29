@@ -27,5 +27,6 @@ git clone https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6.git 
 - npm install password-validator
 - npm install email-validator
 - npm install helmet --save
+- npm install crypto-js
 
 <p>nodemon server</p>

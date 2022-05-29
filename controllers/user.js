@@ -1,27 +1,35 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const emailValidator = require("email-validator");
-
+//---------------------------
+// Requires
+//---------------------------
 const User = require("../models/User");
+
+// Security Requires
+const bcrypt = require("bcrypt");                   // Chiffrage du password dans la BDD
+const cryptoJs = require ('crypto-js');             // Chiffrage du mail dans la BDD
+const jwt = require("jsonwebtoken");                // Token
+const emailValidator = require("email-validator");  // Vérification format email
 
 //------------------------------------------
 // Méthode de création de compte utilisateur
 //------------------------------------------
+
 exports.signup = (req, res, next) => {
-  // vérification du format de l'email
-  const isValidateEmail = emailValidator.validate(req.body.email);
+
+    const emailCryptoJs = cryptoJs.HmacSHA256(req.body.email, "CLE_SECRETE").toString() // chiffrage du mail avant envoie à la BDD
+    const isValidateEmail = emailValidator.validate(req.body.email); // vérification du format de l'email
+
+    // Si email au bon format alors = hashage du mot de passe avec bcryptc
   if (!isValidateEmail) {
     res.writeHead(400, 'Email incorrect !"}', {
       "content-type": "application/json",
     });
     res.end("Le format de l'email est incorrect.");
   } else {
-    // Si email au bon format alors = hashage du mot de passe avec bcrypt
     bcrypt
       .hash(req.body.password, 10)
       .then((hash) => {
         const user = new User({
-          email: req.body.email,
+          email: emailCryptoJs,
           password: hash,
         });
         user
@@ -36,8 +44,12 @@ exports.signup = (req, res, next) => {
 //---------------------------------
 // Méthode de connexion utilisateur
 //---------------------------------
+
 exports.login = (req, res, next) => {
-  User.findOne({ email: req.body.email })
+
+    const cryptedResearchedEmail = cryptoJs.HmacSHA256(req.body.email, 'CLE_SECRETE').toString(); // décryptage du mail
+
+  User.findOne({ email: cryptedResearchedEmail })
     .then((user) => {
       if (!user) {
         return res.status(401).json({ error: "Utilisateur non trouvé !" });
@@ -51,9 +63,9 @@ exports.login = (req, res, next) => {
           }
           res.status(200).json({
             userId: user._id,
-            token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
-              expiresIn: "24h",
-            }),
+            token: jwt.sign({ userId: user._id },
+                process.env.TOKEN_KEY,
+                { expiresIn: "24h"}),
           });
         })
         .catch((error) => res.status(500).json({ error }));
